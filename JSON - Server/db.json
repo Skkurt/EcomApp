@@ -1,0 +1,28 @@
+{
+    "items": [
+        {
+            "id": "1",
+            "name": "Nom random",
+            "description": "ça c'est la description",
+            "price": 55,
+            "imagePath": "C:\\Users\\alpoimf\\Work Folders\\DONNEES\\Ecole"
+        },
+        {
+            "id": "2",
+            "name": "autre non random",
+            "description": "ça c'est la description",
+            "price": 32,
+            "imagePath": "C:\\Users\\alpoimf\\Work Folders\\DONNEES\\Ecole"
+        }
+    ],
+    "shopingCart": [
+        {
+            "itemId": "2",
+            "Amount": 2   
+        },
+        {
+            "itemId": "1",
+            "Amount": 1   
+        }
+    ]
+}
