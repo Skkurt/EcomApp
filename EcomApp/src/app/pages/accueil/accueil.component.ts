@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {Prime} from "../../models/prime";
 import {Cart} from "../../models/cart";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-accueil',
@@ -9,7 +10,14 @@ import {Cart} from "../../models/cart";
 })
 export class AccueilComponent {
 
-  primes: Prime[] = [
+
+  constructor(
+    private readonly httpClient: HttpClient
+  ) {
+  }
+
+  primes = this.httpClient.get<Prime[]>('http://localhost:3000/items')
+  primes1: Prime[] = [
     {
       id: 1,
       title: "Prime 1",
