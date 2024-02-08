@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-addproduct',
+  selector: 'app-addproduct',
   templateUrl: './add-product.component.html',
   animations: []
 })
