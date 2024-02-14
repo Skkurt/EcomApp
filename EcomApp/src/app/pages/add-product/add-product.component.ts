@@ -13,7 +13,9 @@ import { PopupService } from 'src/app/services/pop-up/popup.service';
 export class AddProductComponent {
   products!: Observable<Prime[]>;
   product!: Observable<Prime>;
-  isPopupOpen = false;
+  isUpdatePopupOpen = false;
+  isAddPopupOpen = false;
+  isDeletePopupOpen = false;
   isSuccessPopupOpen = false;
 
   constructor(private http: HttpClient, private popupService: PopupService) {
@@ -26,13 +28,30 @@ export class AddProductComponent {
     this.fetchData();
   }
 
-  openPopup(id: number) {
-    this.isPopupOpen = true;
+  openUpdatePopup(id: number) {
+    this.isUpdatePopupOpen = true;
     this.getItemById(id);
   }
 
-  closePopup() {
-    this.isPopupOpen = false;
+  closeUpdatePopup() {
+    this.isUpdatePopupOpen = false;
+  }
+
+  openAddPopup() {
+    this.isAddPopupOpen = true;
+  }
+
+  closeAddPopup() {
+    this.isAddPopupOpen = false;
+  }
+
+  openDeletePopup() {
+    this.isDeletePopupOpen = true;
+  }
+
+  closeDeletePopup() {
+    this.isDeletePopupOpen = false;
+    this.isUpdatePopupOpen = true;
   }
 
   fetchData() {
@@ -50,23 +69,69 @@ export class AddProductComponent {
       console.error('Nouveau prix non défini');
       return;
     }
-    
+
     const url = 'http://localhost:3000/items/' + id;
     this.http.get<Prime>(url).pipe(
-      switchMap((product) => {    
-        product.price = parseInt(newPrice);   
-        return this.http.put<Prime>(url, product);    
-      })  
+      switchMap((product) => {
+        product.price = parseInt(newPrice);
+        return this.http.put<Prime>(url, product);
+      })
     ).subscribe(
       {
         next: (updatedProduct) => {
           console.log('Produit modifié avec succès :', updatedProduct);
           this.fetchData();
-          this.closePopup();
+          this.closeUpdatePopup();
           this.popupService.setMessage('Succès', 'Le produit a été modifié avec succès');
         },
         error: (error) => {
           console.error('Erreur lors de la modification du produit :', error);
+        }
+      }
+    );
+  }
+
+  addProduct(title: string, description: string, price: string, image: string) {
+    if (!title || !description || !price || !image) {
+      console.error('Titre, description, prix ou image non défini');
+      return;
+    }
+
+    const url = 'http://localhost:3000/items';
+    const product = {
+      title,
+      description,
+      price: parseInt(price),
+      image
+    };
+    this.http.post<Prime>(url, product).subscribe(
+      {
+        next: (newProduct) => {
+          console.log('Produit ajouté avec succès :', newProduct);
+          this.fetchData();
+          this.closeAddPopup();
+          this.popupService.setMessage('Succès', 'Le produit a été ajouté avec succès');
+        },
+        error: (error) => {
+          console.error('Erreur lors de l\'ajout du produit :', error);
+        }
+      }
+    );
+  }
+
+  deleteProduct(id: number) {
+    const url = 'http://localhost:3000/items/' + id;
+    this.http.delete<Prime>(url).subscribe(
+      {
+        next: (deletedProduct) => {
+          console.log('Produit supprimé avec succès :', deletedProduct);
+          this.fetchData();
+          this.closeDeletePopup();
+          this.closeUpdatePopup();
+          this.popupService.setMessage('Succès', 'Le produit a été supprimé avec succès');
+        },
+        error: (error) => {
+          console.error('Erreur lors de la suppression du produit :', error);
         }
       }
     );

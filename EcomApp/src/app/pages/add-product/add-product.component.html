@@ -2,8 +2,11 @@
   <div>
     <main>  
       <section aria-labelledby="products-heading" class="mx-auto max-w-2xl px-4 pt-12 pb-16 sm:px-6 sm:pt-16 sm:pb-24 lg:max-w-7xl lg:px-8">
-        <h2 id="products-heading" class="sr-only">Produits</h2>
-
+        <div class="mt-6 grid justify-items-stretch">
+          <h1 class="text-3xl font-bold tracking-tight text-gray-900">Produits</h1>
+          <button (click)="openAddPopup()" class="w-32 justify-self-end rounded-md border border-transparent bg-emerald-500 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-gray-50">Ajouter</button>
+        </div>
+        <br/>
         <div class="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
           <ng-container *ngIf="products | async as productsbon">
             <div *ngFor="let product of productsbon">
@@ -15,7 +18,7 @@
               <h3 class="mt-4 text-sm text-gray-700">{{ product.title }}</h3>
               <p class="mt-1 text-lg font-medium text-gray-900">{{ product.price }}.-</p>
               <div class="mt-6">
-                <button (click)="openPopup(product.id)" class="w-full rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50">Modifier</button>
+                <button (click)="openUpdatePopup(product.id)" class="w-full rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50">Modifier</button>
               </div>
             </div>
           </ng-container>
@@ -29,7 +32,38 @@
   <app-sucess-pop-up></app-sucess-pop-up>
 </div>
 
-<div *ngIf="isPopupOpen && product" class="fixed inset-0 z-10 w-screen h-screen overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+<div *ngIf="isAddPopupOpen" class="fixed inset-0 z-10 w-screen h-screen overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+  <div class="bg-gray-500 bg-opacity-75 transition-opacity"></div>
+  <div class="flex items-center justify-center min-h-full">
+    <div class="relative bg-white w-full max-w-lg p-6 rounded-lg shadow-xl">
+      <div class="px-4 py-5 sm:p-6">
+        <h3 class="text-base font-semibold leading-6 text-gray-900">Ajouter un article</h3>
+        <div>
+          <p>Indiquer le nom, une description, le prix et une image du produit à ajouter :</p>
+          <form class="mt-5 sm:flex sm:items-center">
+            <div class="w-full sm:max-w-xs">
+              <label class="sr-only">Nom: </label>
+              <input id="name" #nameProductInput class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Nom de l'article">
+              <label class="sr-only">Description: </label>
+              <input id="description" #descriptionProductInput class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Description de l'article">
+              <label class="sr-only">Prix: </label>
+              <input type="number" id="price" #priceProductInput class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Prix de l'article">
+              <label class="sr-only">Image: </label>
+              <input id="image" #imageProductInput class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Image de l'article">
+            </div>
+            <button type="button" (click)="addProduct(nameProductInput.value, descriptionProductInput.value, priceProductInput.value, imageProductInput.value)" class="mt-3 inline-flex w-full items-center justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:ml-3 sm:mt-0 sm:w-auto">Sauvegarder</button>
+          </form>            
+        </div>
+      </div>
+
+      <button (click)="closeAddPopup()" type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+        Fermer
+      </button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="isUpdatePopupOpen && product" class="fixed inset-0 z-10 w-screen h-screen overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
   <div class="bg-gray-500 bg-opacity-75 transition-opacity"></div>
   <div class="flex items-center justify-center min-h-full">
     <div class="relative bg-white w-full max-w-lg p-6 rounded-lg shadow-xl">
@@ -47,10 +81,36 @@
             </form>            
           </div>
       </div>
-
-      <button (click)="closePopup()" type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+      <button (click)="openDeletePopup()" type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-red-700">
+        Supprimer
+      </button>
+      <br/>
+      <button (click)="closeUpdatePopup()" type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
         Fermer
       </button>
     </div>
   </div>
+
+  <div *ngIf="isDeletePopupOpen && product" class="fixed inset-0 z-10 w-screen h-screen overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="bg-gray-500 bg-opacity-75 transition-opacity"></div>
+    <div class="flex items-center justify-center min-h-full">
+      <div class="relative bg-white w-full max-w-lg p-6 rounded-lg shadow-xl">
+        <div class="px-4 py-5 sm:p-6">
+          <div *ngIf="product">
+            <div *ngIf="product | async as productData">
+              <h3 class="text-base font-semibold leading-6 text-gray-900">Supprimer l'article</h3>
+              <p class="text-red-500">Voulez-vous vraiment supprimer l'article : {{ productData.title }} ?</p>
+              <button (click)="deleteProduct(productData.id)" type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-red-700">
+                Supprimer définitivement
+              </button>
+            </div>
+          </div>
+          <br/>
+          <button (click)="closeDeletePopup()" type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+            Fermer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>  
 </div>
