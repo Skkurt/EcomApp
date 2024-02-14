@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Prime } from 'src/app/models/prime';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+import { PopupService } from 'src/app/services/pop-up/popup.service';
 
 @Component({
   selector: 'app-addproduct',
@@ -13,8 +14,13 @@ export class AddProductComponent {
   products!: Observable<Prime[]>;
   product!: Observable<Prime>;
   isPopupOpen = false;
+  isSuccessPopupOpen = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private popupService: PopupService) {
+    this.popupService.popupStatus$.subscribe(status => {
+      this.isSuccessPopupOpen = status;
+    });
+  }
 
   ngOnInit() {
     this.fetchData();
@@ -57,6 +63,7 @@ export class AddProductComponent {
           console.log('Produit modifié avec succès :', updatedProduct);
           this.fetchData();
           this.closePopup();
+          this.popupService.setMessage('Succès', 'Le produit a été modifié avec succès');
         },
         error: (error) => {
           console.error('Erreur lors de la modification du produit :', error);
