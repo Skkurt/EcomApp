@@ -50,6 +50,14 @@ export class PaymentComponent implements OnInit {
     console.log('Payment done');
   }
 
+  deleteProduct(id: number) {
+    const url = 'http://localhost:3000/shopingCart/' + id;
+    this.http.delete(url).subscribe(() => {
+      this.fetchCart();
+      this.calculTotal();
+    });
+  }
+
 }
 
   @NgModule({
