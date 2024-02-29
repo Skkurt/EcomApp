@@ -11,6 +11,7 @@ import { SucessPopUpComponent } from './components/sucess-pop-up/sucess-pop-up.c
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
