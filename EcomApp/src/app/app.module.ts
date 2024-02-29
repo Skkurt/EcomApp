@@ -7,12 +7,14 @@ import { AccueilComponent } from './pages/accueil/accueil.component';
 import { ShoppingCartComponent } from './pages/shopping-cart/shopping-cart.component';
 import { AddProductComponent } from './pages/add-product/add-product.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
     AccueilComponent,
     ShoppingCartComponent,
-    AddProductComponent
+    AddProductComponent,
+    
   ],
   imports: [
     BrowserModule,

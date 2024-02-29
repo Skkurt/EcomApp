@@ -2,10 +2,13 @@
     "items": [
         {
             "id": "1",
-            "name": "Nom random",
-            "description": "ça c'est la description",
-            "price": 55,
-            "imagePath": "C:\\Users\\alpoimf\\Work Folders\\DONNEES\\Ecole"
+            "name": "CHERRY FREEZE",
+            "description": ["Cold-activated bottle ", "Zero added sugar​", "20 Calories​", "10% Coconut Water",
+            "BCAAs + B Vitamins",
+            "Antioxidants + Electrolytes",
+            "Caffeine-Free"],
+            "price": 29.99,
+            "imagePath": "https://drinkprime.com/cdn/shop/files/CherryFreeze-Front_2_700x.png?v=1703182111"
         },
         {
             "id": "2",
