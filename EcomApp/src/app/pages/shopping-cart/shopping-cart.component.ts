@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {Component, OnInit} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Prime} from "../../models/prime";
+import {tap} from "rxjs";
+import {ShoppingCart} from "../../models/cart";
 
 @Component({
   selector: 'app-shopping-cart',
@@ -7,12 +10,34 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./shopping-cart.component.css'],
 })
 
-export class ShoppingCartComponent {
-  constructor(private http: HttpClient) {}
+export class ShoppingCartComponent implements OnInit{
+
+  primes!: Prime[];
+  reduceList!: Prime[];
+
+  testArray!: ShoppingCart[]
 
 
-  ngOnInit(): void {
 
+  constructor(
+    private readonly httpClient: HttpClient
+  ) {
+  }
+
+  ngOnInit() {
+    const items = localStorage.getItem('items')
+    if (items)
+      this.reduceList = JSON.parse(items)
+
+    const test = this.reduceList
+
+    console.log(test)
+    // this.primes = this.reduceList
+    // this.httpClient.get<Prime[]>('http://localhost:3000/items').pipe(
+    //   tap(primes => {
+    //     this.primes = primes
+    //   })
+    // ).subscribe()
   }
 
 }
