@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Prime } from 'src/app/models/prime';
+import {Component, OnInit} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Prime} from "../../models/prime";
+import {tap} from "rxjs";
+import {ShoppingCart} from "../../models/cart";
 
 @Component({
   selector: 'app-shopping-cart',
@@ -9,19 +10,34 @@ import { Prime } from 'src/app/models/prime';
   styleUrls: ['./shopping-cart.component.css'],
 })
 
-export class ShoppingCartComponent {
-  constructor(private http: HttpClient) {}
+export class ShoppingCartComponent implements OnInit{
 
-  products!: Observable<Prime[]>;
-  product!: Observable<Prime>;
+  primes!: Prime[];
+  reduceList!: Prime[];
 
-  ngOnInit(): void {
-    this.fetchData();
+  testArray!: ShoppingCart[]
+
+
+
+  constructor(
+    private readonly httpClient: HttpClient
+  ) {
   }
 
-  fetchData() {
-    const url = 'http://localhost:3000/items';
-    this.products = this.http.get<Prime[]>(url);
+  ngOnInit() {
+    const items = localStorage.getItem('items')
+    if (items)
+      this.reduceList = JSON.parse(items)
+
+    const test = this.reduceList
+
+    console.log(test)
+    // this.primes = this.reduceList
+    // this.httpClient.get<Prime[]>('http://localhost:3000/items').pipe(
+    //   tap(primes => {
+    //     this.primes = primes
+    //   })
+    // ).subscribe()
   }
 
 }
