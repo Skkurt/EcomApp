@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Prime} from "../../models/prime";
 import {HttpClient} from "@angular/common/http";
 import {tap} from "rxjs";
+import {Cart} from "../../models/cart";
 
 @Component({
   selector: 'app-accueil',

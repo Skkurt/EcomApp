@@ -10,7 +10,7 @@
         <h2 id="cart-heading" class="sr-only">Panier d'achat</h2>
 
         <ul
-          *ngFor="let prime of primes"
+          *ngFor="let prime of reduceList"
           role="list"
           class="divide-y divide-gray-200 border-b border-t border-gray-200"
         >
@@ -44,46 +44,16 @@
                 </div>
 
                 <div class="mt-4 sm:mt-0 sm:pr-9">
-                  <label for="quantity-0" class="sr-only"
-                    >Quantity, Basic Tee</label
-                  >
-                  <select
-                    id="quantity-0"
-                    name="quantity-0"
-                    class="max-w-full rounded-md border border-gray-300 py-1.5 text-left text-base font-medium leading-5 text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
-                  >
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                  </select>
+                  <p>Quantité : {{prime.quantity}}</p>
                 </div>
-                <div class="w-full mt-4" (click)="deleteProduct(prime.id)">
+
+                <button class="w-full mt-4" (click)="deleteProduct(prime.cartId)">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                   </svg>
-                </div>
-              </div>
+                </button>
 
-              <p class="mt-4 flex space-x-2 text-sm text-gray-700">
-                <svg
-                  class="h-5 w-5 flex-shrink-0 text-green-500"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-                <span>In stock</span>
-              </p>
+              </div>
             </div>
           </li>
         </ul>
