@@ -10,9 +10,12 @@ import { AddProductComponent } from './pages/add-product/add-product.component';
 import { SucessPopUpComponent } from './components/sucess-pop-up/sucess-pop-up.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
+import {NgOptimizedImage} from "@angular/common";
+
 
 @NgModule({
   declarations: [
+
     AppComponent,
     AccueilComponent,
     ShoppingCartComponent,
@@ -21,11 +24,12 @@ import { FooterComponent } from './components/footer/footer.component';
     NavbarComponent,
     FooterComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        NgOptimizedImage,
+    ],
   providers: [
     SucessPopUpComponent
   ],
