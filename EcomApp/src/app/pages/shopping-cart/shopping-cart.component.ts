@@ -1,7 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Prime} from '../../models/prime';
-import {Cart, ShoppingCart} from '../../models/cart';
+import {Cart} from "../../models/cart";
 
 @Component({
   selector: 'app-shopping-cart',
@@ -9,73 +7,39 @@ import {Cart, ShoppingCart} from '../../models/cart';
   styleUrls: ['./shopping-cart.component.css'],
 })
 export class ShoppingCartComponent implements OnInit {
-  primes!: Prime[];
-  reduceList!: Cart[];
 
-  testArray!: ShoppingCart[];
+  primeList!: Cart[];
+  totalPrice = 0;
 
-  totalPrice!: number;
-  toDelete!: boolean;
-
-  constructor(private readonly http: HttpClient) {
-  }
-
-  ngOnInit() {
-    const items = localStorage.getItem('items');
-    if (items) this.reduceList = JSON.parse(items);
-
-    const test = this.reduceList;
-
-    // this.primes = this.reduceList;
-    this.reduceList = this.trierEtCompter(this.primes);
-    this.totalPrice = this.getAllPrices(this.reduceList);
-    console.log(this.reduceList)
-  }
-
-  trierEtCompter(liste: Prime[]): any[] {
-    const counts: { [title: string]: number } = {};
-    liste.forEach(objet => {
-      const titre = objet.title;
-      if (counts[titre]) {
-        counts[titre]++;
-      } else {
-        counts[titre] = 1;
-      }
-    });
-
-    const triee: Cart[] = [];
-    for (const titre in counts) {
-      triee.push({
-        ...liste.find(item => item.title === titre)!,
-        quantity: counts[titre],
-        cartId: Math.floor(Math.random() * 1000)
-      });
+  ngOnInit(): void {
+    const items = localStorage.getItem('filterItem');
+    if (items) {
+      this.primeList = JSON.parse(items);
     }
 
-    return triee;
+    this.totalPrice = this.getAllPrices(this.primeList);
+  }
+
+
+  deleteProduct(cartId: number) {
+    const index = this.primeList.findIndex(item => item.cartId === cartId);
+    if (index !== -1) {
+      this.primeList.splice(index, 1);
+    }
+    this.totalPrice = this.getAllPrices(this.primeList);
+
+    localStorage.removeItem('filterItem')
+    localStorage.setItem('filterItem', JSON.stringify(this.primeList))
+    localStorage.removeItem('items')
   }
 
   getAllPrices(primeList: Cart[]): number {
-    const total: number = primeList
+    return primeList
       .reduce((prix, prime) => {
           const tot = prime.quantity * prime.price
           return prix + tot
         },
         0
       );
-    console.log(total);
-    return total;
-  }
-
-  deleteProduct(id: number) {
-    console.log(this.reduceList)
-    const liste = this.reduceList.filter((prime) => {
-      console.log(prime)
-      return prime.cartId != id
-    });
-
-    console.log(liste)
-
-    this.reduceList = liste
   }
 }

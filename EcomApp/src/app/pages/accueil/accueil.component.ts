@@ -37,7 +37,33 @@ export class AccueilComponent implements OnInit {
       cart = JSON.parse(items);
 
     cart.push(prime)
+
+    let filterCart = []
+    filterCart = this.groupAndCountProducts(cart);
+
+    localStorage.removeItem('filterItem');
+    localStorage.setItem('filterItem', JSON.stringify(filterCart));
     localStorage.setItem('items', JSON.stringify(cart));
 
+  }
+
+  groupAndCountProducts(products: Prime[]): Cart[] {
+    const groupedProducts: { [title: string]: Cart } = {};
+
+    // Group products by title and count occurrences
+    for (const product of products) {
+      if (!groupedProducts[product.title]) {
+        groupedProducts[product.title] = { ...product, quantity: 0, cartId: Math.floor(Math.random() * 1000) };
+      }
+      groupedProducts[product.title].quantity++;
+    }
+
+    // Convert object back to array
+    const result: Cart[] = [];
+    for (const title in groupedProducts) {
+      result.push(groupedProducts[title]);
+    }
+
+    return result;
   }
 }

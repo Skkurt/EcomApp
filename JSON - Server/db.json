@@ -11,21 +11,21 @@
       "id": 2,
       "title": "Prime 2",
       "description": "Description 2",
-      "price": 4,
+      "price": 1800,
       "image": "https://www.unitedsweets.co.nz/cdn/shop/files/PrimeStrawberry_1024x1024.png?v=1700984118"
     },
     {
       "id": 3,
       "title": "Prime 3",
       "description": "Description 3",
-      "price": 4,
+      "price": 200,
       "image": "https://www.sportsdirect.com/images/imgzoom/71/71065903_xxl.jpg"
     },
     {
       "id": 4,
       "title": "Prime 4",
       "description": "Description 4",
-      "price": 4,
+      "price": 8000,
       "image": "https://i.ebayimg.com/images/g/CtIAAOSwXoBkZLUo/s-l1600.jpg"
     }
   ],
