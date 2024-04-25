@@ -60,8 +60,8 @@
                     <span class="sr-only">Prime</span>
                 </a>
             </div>
-    
-            <form class="mt-6" [formGroup]="checkoutForm" (ngSubmit)="pay()">
+
+            <form class="mt-6" [formGroup]="checkoutForm">
                 <div class="grid grid-cols-12 gap-x-4 gap-y-6">
                     <div class="col-span-full">
                     <label for="email-address" class="block text-sm font-medium text-gray-700">Adresse Mail</label>
@@ -126,8 +126,8 @@
                     </div>
                     </div>
                 </div>
-    
-                <button type="submit" [disabled]="checkoutForm.invalid || checkoutFormSubmitted" class="mt-6 w-full rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Payer {{total}} CHF</button>
+
+                <button type="submit" (click)="pay()" [disabled]="checkoutForm.invalid" class="mt-6 w-full rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Payer {{total}} CHF</button>
 
                 <p class="mt-6 flex justify-center text-sm font-medium text-gray-500">
                     <svg class="mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" viewBox="0 0 20 20" fill="currentColor">
@@ -148,7 +148,7 @@
                 <circle class="path circle" fill="none" stroke="#73AF55" stroke-width="6" stroke-miterlimit="10" cx="65.1" cy="65.1" r="62.1"/>
                 <polyline class="path check" fill="none" stroke="#73AF55" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
             </svg>
-            <p class="success">Votre paiement a été confirmé avec succès!</p>     
+            <p class="success">Votre paiement a été confirmé avec succès!</p>
         </div>
     </div>
 </div>

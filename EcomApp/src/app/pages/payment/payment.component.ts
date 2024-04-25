@@ -1,11 +1,12 @@
 import { Component, NgModule, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, forkJoin } from 'rxjs';
+import {Observable, forkJoin, timeout} from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { Prime } from 'src/app/models/prime';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-payment',
@@ -26,7 +27,9 @@ export class PaymentComponent implements OnInit {
   checkoutFormSubmitted: boolean = true;
 
 
-  constructor(private http: HttpClient, private formBuilder: FormBuilder) {
+  constructor(private http: HttpClient,
+              private formBuilder: FormBuilder,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -54,7 +57,7 @@ export class PaymentComponent implements OnInit {
         return forkJoin(requests);
       })
     );
-  }  
+  }
 
   calculTotal() {
     this.products.subscribe((res: any) => {
@@ -71,6 +74,10 @@ export class PaymentComponent implements OnInit {
     this.isPopupOpen = true;
     console.log(this.checkoutForm.invalid);
     console.log('Payment done');
+    setTimeout(() => {
+      this.router.navigate(['/']);
+    }, 5000)
+
   }
 
   checkout() {
@@ -89,6 +96,6 @@ export class PaymentComponent implements OnInit {
 
 @NgModule({
   declarations: [PaymentComponent],
-  imports: [CommonModule, ReactiveFormsModule] 
+  imports: [CommonModule, ReactiveFormsModule]
 })
 export class PaymentComponentModule {}
