@@ -8,6 +8,7 @@ import { ShoppingCartComponent } from './pages/shopping-cart/shopping-cart.compo
 import { AddProductComponent } from './pages/add-product/add-product.component';
 import { HttpClientModule } from "@angular/common/http";
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { CommonModule } from '@angular/common';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    CommonModule
+    CommonModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

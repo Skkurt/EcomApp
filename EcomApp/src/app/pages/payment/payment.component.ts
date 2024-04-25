@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgModule, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { Observable, forkJoin, of, switchMap } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { Prime } from 'src/app/models/prime';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-payment',
@@ -14,14 +16,33 @@ export class PaymentComponent implements OnInit {
 
   items: any[] = [];
   products: Observable<Prime[]>;
+  product!: Observable<Prime>;
   subtotal: number = 0;
   shipping: number = 10;
   total: number = 0;
-  constructor(private http: HttpClient) { }
+  isUpdatePopupOpen = false;
+  isPopupOpen: boolean = false;
+  checkoutForm: FormGroup;
+  checkoutFormSubmitted: boolean = true;
+
+
+  constructor(private http: HttpClient, private formBuilder: FormBuilder) {
+  }
 
   ngOnInit() {
     this.fetchCart();
     this.calculTotal();
+    this.checkoutForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+      cardName: ['', Validators.required],
+      cardNumber: ['', Validators.required],
+      expirationDate: ['', Validators.required],
+      cvc: ['', Validators.required],
+      address: ['', Validators.required],
+      city: ['', Validators.required],
+      region: ['', Validators.required],
+      postalCode: ['', Validators.required]
+    });
   }
 
   fetchCart() {
@@ -47,7 +68,13 @@ export class PaymentComponent implements OnInit {
   }
 
   pay() {
+    this.isPopupOpen = true;
+    console.log(this.checkoutForm.invalid);
     console.log('Payment done');
+  }
+
+  checkout() {
+    console.log(this.checkoutForm)
   }
 
   deleteProduct(id: number) {
@@ -57,11 +84,11 @@ export class PaymentComponent implements OnInit {
       this.calculTotal();
     });
   }
-
 }
 
-  @NgModule({
-    declarations: [PaymentComponent],
-    imports: [CommonModule] 
-  })
-  export class PaymentComponentModule {}
+
+@NgModule({
+  declarations: [PaymentComponent],
+  imports: [CommonModule, ReactiveFormsModule] 
+})
+export class PaymentComponentModule {}
