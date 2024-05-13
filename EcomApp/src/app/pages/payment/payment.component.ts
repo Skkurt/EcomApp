@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import {Router} from "@angular/router";
+import {Cart} from "../../models/cart";
 
 @Component({
   selector: 'app-payment',
@@ -25,6 +26,7 @@ export class PaymentComponent implements OnInit {
   isPopupOpen: boolean = false;
   checkoutForm: FormGroup;
   checkoutFormSubmitted: boolean = true;
+  primeList!: Cart[];
 
 
   constructor(private http: HttpClient,
@@ -34,7 +36,8 @@ export class PaymentComponent implements OnInit {
 
   ngOnInit() {
     this.fetchCart();
-    this.calculTotal();
+    // this.calculTotal();
+    this.total = this.getAllPrices(this.primeList);
     this.checkoutForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       cardName: ['', Validators.required],
@@ -50,28 +53,46 @@ export class PaymentComponent implements OnInit {
 
   fetchCart() {
     const url = 'http://localhost:3000/shopingCart';
-    this.products = this.http.get<any[]>(url).pipe(
-      switchMap((res: any[]) => {
-        this.items = res;
-        const requests = this.items.map(item => this.http.get<Prime>('http://localhost:3000/items/' + item.itemId));
-        return forkJoin(requests);
-      })
-    );
+
+    const items = localStorage.getItem('filterItem');
+    if (items) {
+      this.primeList = JSON.parse(items);
+    }
+
+    // this.products = this.http.get<any[]>(url).pipe(
+    //   switchMap((res: any[]) => {
+    //     this.items = res;
+    //     const requests = this.items.map(item => this.http.get<Prime>('http://localhost:3000/items/' + item.itemId));
+    //     return forkJoin(requests);
+    //   })
+    // );
   }
 
-  calculTotal() {
-    this.products.subscribe((res: any) => {
-      let total = 0;
-      res.forEach((item: any) => {
-        total += item.price;
-      });
-      this.subtotal = total;
-      this.total = this.subtotal + this.shipping;
-    });
+  getAllPrices(primeList: Cart[]): number {
+    return primeList
+      .reduce((prix, prime) => {
+          const tot = prime.quantity * prime.price
+          return prix + tot
+        },
+        0
+      );
+  }
+  deleteProduct(cartId: number) {
+    const index = this.primeList.findIndex(item => item.cartId === cartId);
+    if (index !== -1) {
+      this.primeList.splice(index, 1);
+    }
+    this.total = this.getAllPrices(this.primeList);
+
+    localStorage.removeItem('filterItem')
+    localStorage.setItem('filterItem', JSON.stringify(this.primeList))
+    localStorage.removeItem('items')
   }
 
   pay() {
     this.isPopupOpen = true;
+    localStorage.removeItem('filterItem')
+    localStorage.removeItem('items')
     console.log(this.checkoutForm.invalid);
     console.log('Payment done');
     setTimeout(() => {
@@ -80,17 +101,6 @@ export class PaymentComponent implements OnInit {
 
   }
 
-  checkout() {
-    console.log(this.checkoutForm)
-  }
-
-  deleteProduct(id: number) {
-    const url = 'http://localhost:3000/shopingCart/' + id;
-    this.http.delete(url).subscribe(() => {
-      this.fetchCart();
-      this.calculTotal();
-    });
-  }
 }
 
 
